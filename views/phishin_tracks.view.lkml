@@ -62,6 +62,8 @@ view: phishin_tracks {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.show_date ;;
+
+  # html: {% if phishin_tracks__tags.name == "Jamcharts" %} {{value}}} ;;
   }
 
   dimension: show_id {
@@ -95,18 +97,20 @@ view: phishin_tracks {
     type: count
     drill_fields: [id, set_name]
   }
+
 }
 
-view: phishin_tracks__tags {
+ view: phishin_tracks__tags {
   drill_fields: [id]
 
   dimension: id {
-    primary_key: yes
+    hidden: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
   dimension: color {
+    hidden: yes
     type: string
     sql: ${TABLE}.color ;;
   }
@@ -117,6 +121,7 @@ view: phishin_tracks__tags {
   }
 
   dimension: name {
+    label: "Tag"
     type: string
     sql: ${TABLE}.name ;;
   }
@@ -127,6 +132,7 @@ view: phishin_tracks__tags {
   }
 
   dimension: priority {
+    hidden: yes
     type: number
     sql: ${TABLE}.priority ;;
   }
@@ -135,4 +141,10 @@ view: phishin_tracks__tags {
     type: string
     sql: ${TABLE}.transcript ;;
   }
+
+  dimension: jamcharts_notes {
+    sql: case when ${name} = "Jamcharts" then regexp_replace(${notes},"&gt;",">") else null end ;;
+  }
+
+
 }

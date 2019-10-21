@@ -1,49 +1,37 @@
 view: phishnet_songs {
-  sql_table_name: dean_looker_phish_thesis.phishnet_songs ;;
+  derived_table: {
+    sql: SELECT
+        song.title as title,
+        track.song_ids[OFFSET(0)] as song_id,
+        song.originalartist as originalartist,
+        song.times as times,
+        song.debut as debut,
+        song.last as last,
+        song.gap as gap
+      FROM
+        dean_looker_phish_thesis.phishin_tracks as track
+      JOIN
+        dean_looker_phish_thesis.phishnet_songs as song
+      ON
+        track.title = song.title
+      group by title, song_id, originalartist, times, debut, last, gap
+      order by title asc
+       ;;
+  }
 
-  dimension: alias_of {
-    hidden: yes
+  measure: count {
+    type: count
+    drill_fields: [detail*]
+  }
+
+  dimension: title {
     type: string
-    sql: ${TABLE}.alias_of ;;
+    sql: ${TABLE}.title ;;
   }
 
-  dimension_group: debut {
-    label: "Debut Date"
-    description: "Date first played"
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.debut ;;
-  }
-
-  dimension: gap {
-    description: "# of shows since last played"
+  dimension: song_id {
     type: number
-    sql: ${TABLE}.gap ;;
-  }
-
-  dimension_group: last {
-    label: "Last Played Date"
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}.last ;;
+    sql: ${TABLE}.song_id ;;
   }
 
   dimension: originalartist {
@@ -66,13 +54,34 @@ view: phishnet_songs {
     sql: ${TABLE}.times ;;
   }
 
-  dimension: title {
-    type: string
-    sql: ${TABLE}.title ;;
+  dimension: debut {
+    label: "Debut Date"
+    description: "Date first played"
+    type: date
+    sql: ${TABLE}.debut ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: []
+  dimension: last {
+    label: "Last Played Date"
+    type: date
+    sql: ${TABLE}.last ;;
+  }
+
+  dimension: gap {
+    description: "# of shows since last played"
+    type: number
+    sql: ${TABLE}.gap ;;
+  }
+
+  set: detail {
+    fields: [
+      title,
+      song_id,
+      originalartist,
+      times,
+      debut,
+      last,
+      gap
+    ]
   }
 }
