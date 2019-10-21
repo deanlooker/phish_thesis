@@ -25,8 +25,19 @@ explore: phishin_venues {
   }
 }
 
-explore: phishnet_ratings {}
+explore: phishnet_ratings {
 
-explore: phishnet_shows {}
+}
 
-explore: phishnet_songs {}
+explore: phishnet_shows {
+
+}
+
+explore: phishnet_songs {
+  sql_always_where: ${alias_of} IS NULL ;;
+  join: phishin_tracks {
+    view_label: "Tracks"
+    sql_on: ${phishnet_songs.title} = ${phishin_tracks.title} ;;
+    relationship: one_to_many
+  }
+}

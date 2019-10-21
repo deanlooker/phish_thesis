@@ -2,6 +2,7 @@ view: phishnet_songs {
   sql_table_name: dean_looker_phish_thesis.phishnet_songs ;;
 
   dimension: alias_of {
+    hidden: yes
     type: string
     sql: ${TABLE}.alias_of ;;
   }
