@@ -3,19 +3,21 @@ view: phishin_tracks {
   drill_fields: [id]
 
   dimension: id {
+    label: "Track ID"
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
 
   dimension: duration {
+    description: "Duration (in seconds)"
     hidden: yes
     type: number
     sql: ${TABLE}.duration/1000 ;;
   }
 
   dimension: duration_minutes_seconds {
-    label: "Song Duration"
+    label: "Track Duration"
     type: number
     sql: ${duration}/86400.0 ;;
     value_format: "hh:mm:ss"
@@ -23,17 +25,22 @@ view: phishin_tracks {
   }
 
   dimension: likes_count {
+    description: "Amount of phish.in users who have 'liked' the song"
+    hidden: yes
     type: number
     sql: ${TABLE}.likes_count ;;
   }
 
   dimension: mp3 {
-    label: "mp3 Audio URL"
+    label: "Audio URL"
+    description: "Link to audio on phish.in"
     type: string
     sql: ${TABLE}.mp3 ;;
   }
 
   dimension: position {
+    label: "Position in set"
+    description: "Used to order setlists"
     type: number
     sql: ${TABLE}.position ;;
   }
@@ -45,6 +52,8 @@ view: phishin_tracks {
   }
 
   dimension: set_name {
+    label: "Set"
+    description: "Which set of the show the song was played in"
     type: string
     sql: ${TABLE}.set_name ;;
   }
@@ -68,18 +77,19 @@ view: phishin_tracks {
 
   dimension: show_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.show_id ;;
   }
 
   dimension: slug {
+    hidden: yes
     type: string
     sql: ${TABLE}.slug ;;
   }
 
-  dimension: song_ids {
+# need to figure out how to iterate through array to match "Tweezer > etc > Tweezer" types
+  dimension: track_song_ids {
     type: number
-    value_format_name: id
     sql: ${TABLE}.song_ids ;;
   }
 
@@ -89,6 +99,8 @@ view: phishin_tracks {
   }
 
   dimension: title {
+    label: "Track Title"
+    description: "Track Title on Phish.in"
     type: string
     sql: ${TABLE}.title ;;
   }
@@ -116,6 +128,8 @@ view: phishin_tracks {
   }
 
   dimension: group {
+    hidden: yes
+    label: "Tag Group"
     type: string
     sql: ${TABLE}.group ;;
   }
@@ -127,6 +141,8 @@ view: phishin_tracks {
   }
 
   dimension: notes {
+    label: "Track Notes"
+    description: "Displays important information about this particular version of the song - jam styles, teases, segues, etc. "
     type: string
     sql: ${TABLE}.notes ;;
   }
@@ -138,12 +154,35 @@ view: phishin_tracks {
   }
 
   dimension: transcript {
+    label: "Narration/Banter Transcript"
     type: string
     sql: ${TABLE}.transcript ;;
   }
 
+  dimension: starts_at_second {
+    hidden: yes
+    label: "Tagged Event Start Time"
+    description: "Beginning timestamp of tease/narration/etc"
+    type: number
+    sql: ${TABLE}.starts_at_second/86400.0 ;;
+    value_format: "hh:mm:ss"
+  }
+
+  dimension: ends_at_second {
+    hidden:  yes
+    label: "Tagged Event End Time"
+    description: "End timestamp of tease/narration/etc"
+    type: number
+    sql: ${TABLE}.ends_at_second/86400.0 ;;
+    value_format: "hh:mm:ss"
+  }
+
   dimension: jamcharts_notes {
     sql: case when ${name} = "Jamcharts" then regexp_replace(${notes},"&gt;",">") else null end ;;
+  }
+
+  dimension: jamcharts_yesno {
+    sql: ${jamcharts_notes} IS NOT NULL ;;
   }
 
 

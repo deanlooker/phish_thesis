@@ -1,4 +1,5 @@
 view: phishnet_songs {
+  view_label: "Songs"
   derived_table: {
     sql: SELECT
         song.title as title,
