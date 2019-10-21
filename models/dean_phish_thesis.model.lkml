@@ -18,6 +18,7 @@ explore: phishin_tracks {
 }
 
 explore: phishin_venues {
+  label: "Phish Venues"
   join: phishnet_shows {
     type: left_outer
     sql_on: ${phishin_venues.id} = ${phishnet_shows.venueid} ;;
@@ -34,6 +35,7 @@ explore: phishnet_shows {
 }
 
 explore: phishnet_songs {
+  label: "Phish Songs"
   join: phishin_tracks {
     view_label: "Tracks"
     sql_on: ${phishnet_songs.title} = ${phishin_tracks.title} ;;
