@@ -46,4 +46,9 @@ explore: phishnet_songs {
     sql: LEFT JOIN UNNEST(${phishin_tracks.tags}) as phishin_tracks__tags ;;
     relationship: one_to_many
   }
+  join: phishnet_shows {
+    view_label: "Shows"
+    sql_on: ${phishin_tracks.show_date}=${phishnet_shows.showdate_date};;
+    relationship: many_to_one
+  }
 }
