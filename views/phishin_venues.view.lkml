@@ -1,6 +1,5 @@
 view: phishin_venues {
   sql_table_name: dean_looker_phish_thesis.phishin_venues ;;
-  drill_fields: [id]
 
   dimension: id {
     primary_key: yes
@@ -24,25 +23,35 @@ view: phishin_venues {
     sql: ${TABLE}.latitude ;;
   }
 
-  dimension: location {
-    type: string
-    sql: ${TABLE}.location ;;
-  }
-
   dimension: longitude {
     type: number
     sql: ${TABLE}.longitude ;;
   }
 
-  dimension: name {
+  dimension: coordinates {
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
+  dimension: location {
+    description: "City, State, (Country)"
+    type: string
+    sql: ${TABLE}.location ;;
+  }
+
+  dimension: venue_name {
+    description: "Name Of Venue"
     type: string
     sql: ${TABLE}.name ;;
   }
 
-  dimension: other_names {
-    type: string
-    sql: ${TABLE}.other_names ;;
-  }
+#       ** This one is an array **
+#
+#   dimension: other_names {
+#     type: string
+#     sql: ${TABLE}.other_names ;;
+#   }
 
   dimension_group: show_dates {
     type: time
@@ -83,6 +92,7 @@ view: phishin_venues {
 
   dimension_group: updated {
     type: time
+    hidden:  yes
     timeframes: [
       raw,
       time,
@@ -97,6 +107,6 @@ view: phishin_venues {
 
   measure: count {
     type: count
-    drill_fields: [id, name, shows.showid, shows.tourname]
+    drill_fields: [id, venue_name, shows.showid, shows.tourname]
   }
 }

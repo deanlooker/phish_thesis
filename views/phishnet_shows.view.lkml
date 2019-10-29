@@ -1,24 +1,9 @@
 view: phishnet_shows {
   sql_table_name: dean_looker_phish_thesis.phishnet_shows ;;
 
-  dimension: artistid {
-    hidden: yes
-    type: number
-    value_format_name: id
-    sql: ${TABLE}.artistid ;;
-  }
 
-  dimension: artistlink {
-    type: string
-    sql: ${TABLE}.artistlink ;;
-  }
 
-  dimension: billed_as {
-    type: string
-    sql: ${TABLE}.billed_as ;;
-  }
-
-  dimension: link {
+  dimension: setlist_link {
     type: string
     sql: ${TABLE}.link ;;
   }
@@ -29,11 +14,13 @@ view: phishnet_shows {
   }
 
   dimension: setlistnotes {
+    label: "Setlist Notes"
+    description: "Full setlist notes from Phish.net"
     type: string
     sql: ${TABLE}.setlistnotes ;;
   }
 
-  dimension_group: showdate {
+  dimension_group: show {
     type: time
     timeframes: [
       raw,
@@ -50,7 +37,6 @@ view: phishnet_shows {
 
   dimension: showid {
     type: number
-    value_format_name: id
     # hidden: yes
     sql: ${TABLE}.showid ;;
   }
@@ -85,5 +71,24 @@ view: phishnet_shows {
   measure: count {
     type: count
     drill_fields: [tourname, shows.showid, shows.tourname]
+  }
+
+  dimension: artistid {
+    hidden: yes
+    type: number
+    value_format_name: id
+    sql: ${TABLE}.artistid ;;
+  }
+
+  dimension: artistlink {
+    hidden:  yes
+    type: string
+    sql: ${TABLE}.artistlink ;;
+  }
+
+  dimension: billed_as {
+    hidden:  yes
+    type: string
+    sql: ${TABLE}.billed_as ;;
   }
 }

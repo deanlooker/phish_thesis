@@ -1,6 +1,5 @@
 view: phishin_tracks {
   sql_table_name: dean_looker_phish_thesis.phishin_tracks ;;
-  drill_fields: [id]
 
   dimension: id {
     label: "Track ID"
@@ -9,46 +8,24 @@ view: phishin_tracks {
     sql: ${TABLE}.id ;;
   }
 
-  dimension: duration {
-    description: "Duration (in seconds)"
-    hidden: yes
-    type: number
-    sql: ${TABLE}.duration/1000 ;;
-  }
-
-  dimension: duration_minutes_seconds {
-    label: "Track Duration"
-    type: number
-    sql: ${duration}/86400.0 ;;
-    value_format: "hh:mm:ss"
-    description: "Length of the song"
-  }
-
-  dimension: likes_count {
-    description: "Amount of phish.in users who have 'liked' the song"
-    hidden: yes
-    type: number
-    sql: ${TABLE}.likes_count ;;
-  }
-
-  dimension: mp3 {
-    label: "Audio URL"
-    description: "Link to audio on phish.in"
+  dimension: title {
+    label: "Track Title"
+    description: "Track Title on Phish.in"
     type: string
-    sql: ${TABLE}.mp3 ;;
+    sql: ${TABLE}.title ;;
+  }
+
+  dimension: duration {
+    label: "Track Duration"
+    sql: format_timestamp("%M:%S", timestamp_seconds(cast((${TABLE}.duration/1000)AS INT64)));;
+    description: "Length of the song in MM:SS"
   }
 
   dimension: position {
-    label: "Position in set"
+    label: "Position in show"
     description: "Used to order setlists"
     type: number
     sql: ${TABLE}.position ;;
-  }
-
-  dimension: set {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.set ;;
   }
 
   dimension: set_name {
@@ -71,8 +48,6 @@ view: phishin_tracks {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.show_date ;;
-
-  # html: {% if phishin_tracks__tags.name == "Jamcharts" %} {{value}}} ;;
   }
 
   dimension: show_id {
@@ -81,28 +56,11 @@ view: phishin_tracks {
     sql: ${TABLE}.show_id ;;
   }
 
-  dimension: slug {
-    hidden: yes
+  dimension: mp3 {
+    label: "Audio URL"
+    description: "Link to audio on phish.in"
     type: string
-    sql: ${TABLE}.slug ;;
-  }
-
-# need to figure out how to iterate through array to match "Tweezer > etc > Tweezer" types
-  dimension: track_song_ids {
-    type: number
-    sql: ${TABLE}.song_ids ;;
-  }
-
-  dimension: tags {
-    hidden: yes
-    sql: ${TABLE}.tags ;;
-  }
-
-  dimension: title {
-    label: "Track Title"
-    description: "Track Title on Phish.in"
-    type: string
-    sql: ${TABLE}.title ;;
+    sql: ${TABLE}.mp3 ;;
   }
 
   measure: count {
@@ -110,80 +68,36 @@ view: phishin_tracks {
     drill_fields: [id, set_name]
   }
 
-}
+  # HIDDEN FIELDS #
 
- view: phishin_tracks__tags {
-  drill_fields: [id]
-
-  dimension: id {
-    hidden: yes
-    type: number
-    sql: ${TABLE}.id ;;
-  }
-
-  dimension: color {
+  dimension: slug {
     hidden: yes
     type: string
-    sql: ${TABLE}.color ;;
+    sql: ${TABLE}.slug ;;
   }
 
-  dimension: group {
+  dimension: tags {
+    # placeholder for unnesting tags in another view
     hidden: yes
-    label: "Tag Group"
-    type: string
-    sql: ${TABLE}.group ;;
+    sql: ${TABLE}.tags ;;
   }
 
-  dimension: name {
-    label: "Tag"
-    type: string
-    sql: ${TABLE}.name ;;
-  }
-
-  dimension: notes {
-    label: "Track Notes"
-    description: "Displays important information about this particular version of the song - jam styles, teases, segues, etc. "
-    type: string
-    sql: ${TABLE}.notes ;;
-  }
-
-  dimension: priority {
-    hidden: yes
-    type: number
-    sql: ${TABLE}.priority ;;
-  }
-
-  dimension: transcript {
-    label: "Narration/Banter Transcript"
-    type: string
-    sql: ${TABLE}.transcript ;;
-  }
-
-  dimension: starts_at_second {
-    hidden: yes
-    label: "Tagged Event Start Time"
-    description: "Beginning timestamp of tease/narration/etc"
-    type: number
-    sql: ${TABLE}.starts_at_second/86400.0 ;;
-    value_format: "hh:mm:ss"
-  }
-
-  dimension: ends_at_second {
+  dimension: set {
     hidden:  yes
-    label: "Tagged Event End Time"
-    description: "End timestamp of tease/narration/etc"
-    type: number
-    sql: ${TABLE}.ends_at_second/86400.0 ;;
-    value_format: "hh:mm:ss"
+    type: string
+    sql: ${TABLE}.set ;;
   }
 
-  dimension: jamcharts_notes {
-    sql: case when ${name} = "Jamcharts" then regexp_replace(${notes},"&gt;",">") else null end ;;
-  }
 
-  dimension: jamcharts_yesno {
-    sql: ${jamcharts_notes} IS NOT NULL ;;
-  }
+#   dimension: likes_count {
+#     description: "Amount of phish.in users who have 'liked' the song"
+#     hidden: yes
+#     type: number
+#     sql: ${TABLE}.likes_count ;;
+#   }
 
+#   dimension: songids {
+#     sql: ${TABLE}.song_ids ;;
+#   }
 
 }
