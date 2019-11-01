@@ -63,6 +63,7 @@ case when tags.notes is not null and tags.starts_at_second is not null then conc
     list_field: jamcharts_notes
   }
 
+
   dimension: notes {
     label: "Notes escaped"
     hidden: yes
@@ -179,9 +180,7 @@ case when tags.notes is not null and tags.starts_at_second is not null then conc
 #     sql: case when ${tag_type} = "Tease" then ${notes} else null end ;;
 #   }
 #
-#   dimension: jamcharts_yesno {
-#     sql: ${jamcharts_notes} IS NOT null ;;
-#   }
+
 #
 #   dimension: is_debut {
 #

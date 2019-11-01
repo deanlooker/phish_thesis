@@ -8,6 +8,7 @@ view: phishin_tracks {
     sql: ${TABLE}.id ;;
   }
 
+# title of the track from phish.in - some tracks include multiple songs segued together #
   dimension: title {
     label: "Track Title"
     description: "Track Title on Phish.in"
@@ -15,9 +16,35 @@ view: phishin_tracks {
     sql: ${TABLE}.title ;;
   }
 
+# durations in the db are stored in ms, this is converted #
+  dimension: duration_seconds {
+    hidden: yes
+    type: number
+    label: "Duration Seconds"
+    sql: cast((${TABLE}.duration/1000)AS INT64) ;;
+  }
+
+
+# This sum aggregates song duration by date, so for dates where the same song is played and then reprised, the duration of the two tracks is aggregated as a sum #
+  measure: song_duration_sum {
+    label: "Jam Duration"
+    description: "Duration of song"
+    type: sum
+    sql: ${duration_seconds}/86400 ;;
+    value_format: "[h]:mm:ss"
+    html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
+          {{ rendered_value }} <br>
+          Jam Notes: {{ phishin_tracks_tags.jamcharts_notes_list._rendered_value }}
+          {% else %}
+          {{ rendered_value }}
+          {% endif %};;
+  }
+
+# this dimension is used for indivudual tracks, so reprised songs are counted separately. #
   dimension: duration {
     label: "Track Duration"
-    sql: format_timestamp("%M:%S", timestamp_seconds(cast((${TABLE}.duration/1000)AS INT64)));;
+    type: string
+    sql: format_timestamp("%M:%S", timestamp_seconds(${duration_seconds}));;
     description: "Length of the song in MM:SS"
   }
 
@@ -48,6 +75,16 @@ view: phishin_tracks {
     convert_tz: no
     datatype: date
     sql: ${TABLE}.show_date ;;
+  }
+
+  measure: last_played {
+    type: date
+    sql: max(${show_raw}) ;;
+  }
+
+  measure: first_played {
+    type: date
+    sql: min(${show_raw}) ;;
   }
 
   dimension: show_id {
@@ -86,6 +123,11 @@ view: phishin_tracks {
     hidden:  yes
     type: string
     sql: ${TABLE}.set ;;
+  }
+
+  dimension: jamcharts_yesno {
+  type: yesno
+  sql: EXISTS (SELECT 1 from unnest(tags) where name = "Jamcharts") ;;
   }
 
 

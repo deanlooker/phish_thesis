@@ -8,20 +8,27 @@ datagroup: weekly {
 }
 
 explore: phishin_tracks {
-  label: "Live Song Versions"
-  view_label: "Live Song Versions"
+  label: "Live Tracks"
+  view_label: "Live Tracks"
   join: phishin_tracks_tags {
-    view_label: "Live Song Versions"
+    view_label: "Live Tracks"
     sql: LEFT JOIN UNNEST(${phishin_tracks.tags}) as phishin_tracks_tags ;;
     relationship: one_to_many
   }
-  join: phishnet_songs {
-    view_label: "Songs"
-  }
   join: track_songids {
-    view_label: "Live Song Versions"
+    view_label: "Live Tracks"
     sql_on: ${track_songids.track_id} = ${phishin_tracks.id} ;;
     relationship:  one_to_many
+  }
+  join: phishnet_songs {
+    view_label: "Songs"
+    sql_on: ${phishnet_songs.song_id} = ${track_songids.song_id} ;;
+    relationship: one_to_many
+  }
+  join: shows_combined {
+    view_label: "Live Shows"
+    sql_on: ${phishin_tracks.show_date}=${shows_combined.date_date}} ;;
+    relationship: many_to_one
   }
 }
 
@@ -46,19 +53,19 @@ explore: phishin_tracks {
 
 explore: phishin_venues {
   label: "Phish Venues"
-  join: phishnet_shows {
+  join: shows_combined {
     type: left_outer
-    sql_on: ${phishin_venues.id} = ${phishnet_shows.venueid} ;;
+    sql_on: ${phishin_venues.id} = ${shows_combined.venueid} ;;
     relationship: one_to_many
   }
 }
 
-explore: phishnet_ratings {
-
-}
-
-explore: phishnet_shows {
-
+explore: shows_combined {
+  label: " Shows"
+  join: phishnet_ratings {
+    sql_on: ${shows_combined.date_date} = ${phishnet_ratings.showdate_date} ;;
+    relationship: one_to_one
+  }
 }
 
 explore: phishnet_songs {
@@ -73,9 +80,9 @@ explore: phishnet_songs {
 #     sql_on: ${phishin_tracks.id} = ${phishin_tracks_tags.track_id} ;;
 #     relationship: one_to_many
 #   }
-  join: phishnet_shows {
+  join: shows_combined {
     view_label: "Shows"
-    sql_on: ${phishin_tracks.show_date}=${phishnet_shows.show_date};;
+    sql_on: ${phishin_tracks.show_date}=${shows_combined.show_date};;
     relationship: many_to_one
   }
 }
