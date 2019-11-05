@@ -27,44 +27,31 @@ explore: phishin_tracks {
   }
   join: shows_combined {
     view_label: "Live Shows"
-    sql_on: ${phishin_tracks.show_date}=${shows_combined.date_date}} ;;
+    sql_on: ${phishin_tracks.show_date} = ${shows_combined.date_date} ;;
     relationship: many_to_one
   }
 }
 
-# explore: phishin_tracks {
-#   label: "Tracks"
-#   join: phishin_tracks_tags {
-#     view_label: "Tracks: Tags"
-#     sql_on: ${phishin_tracks.id} = ${phishin_tracks_tags.track_id} ;;
+
+# explore: phishin_venues {
+#   label: "Phish Venues"
+#   join: shows_combined {
+#     type: left_outer
+#     sql_on: ${phishin_venues.id} = ${shows_combined.venueid} ;;
 #     relationship: one_to_many
-#   }
-#   join: phishnet_shows {
-#     view_label: "Shows"
-#     sql_on: ${phishin_tracks.show_date}=${phishnet_shows.showdate_date};;
-#     relationship: many_to_one
-#   }
-#   join: phishnet_songs {
-#     view_label: "Songs"
-#     sql_on: ${phishin_tracks.title} = ${phishnet_songs.title} ;;
-#     relationship: many_to_one
 #   }
 # }
 
-explore: phishin_venues {
-  label: "Phish Venues"
-  join: shows_combined {
-    type: left_outer
-    sql_on: ${phishin_venues.id} = ${shows_combined.venueid} ;;
-    relationship: one_to_many
-  }
-}
-
 explore: shows_combined {
-  label: " Shows"
+  label: "Shows"
   join: phishnet_ratings {
     sql_on: ${shows_combined.date_date} = ${phishnet_ratings.showdate_date} ;;
     relationship: one_to_one
+  }
+  join: phishin_venues {
+    sql_on: ${shows_combined.venue_name} = ${phishin_venues.venue_name} ;;
+    relationship: many_to_one
+
   }
 }
 

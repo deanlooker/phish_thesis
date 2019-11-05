@@ -12,6 +12,11 @@ view: phishin_venues {
     sql: ${TABLE}.city ;;
   }
 
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
   dimension: country {
     type: string
     map_layer_name: countries
@@ -35,6 +40,7 @@ view: phishin_venues {
   }
 
   dimension: location {
+    label: "Location"
     description: "City, State, (Country)"
     type: string
     sql: ${TABLE}.location ;;
@@ -76,18 +82,15 @@ view: phishin_venues {
   }
 
   dimension: shows_count {
+    description: "Number of shows at the venue according to Phish.net"
     type: number
     sql: ${TABLE}.shows_count ;;
   }
 
   dimension: slug {
+    hidden: yes
     type: string
     sql: ${TABLE}.slug ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
   }
 
   dimension_group: updated {

@@ -26,11 +26,15 @@ view: phishnet_songs {
   }
 
   dimension: title {
+    label: "Song Title"
+    description: "Title of the Song"
     type: string
     sql: ${TABLE}.title ;;
   }
 
   dimension: song_id {
+    label: "Song ID"
+    description: "Used to identify songs in Phish.In Tracks"
     type: number
     sql: ${TABLE}.song_id ;;
   }
@@ -51,19 +55,21 @@ view: phishnet_songs {
 
   dimension: times {
     label: "Times Played"
+    description: "Times played according to Phish.net"
     type: number
     sql: ${TABLE}.times ;;
   }
 
   dimension: debut {
     label: "Debut Date"
-    description: "Date first played"
+    description: "Date first played according to Phish.net"
     type: date
     sql: ${TABLE}.debut ;;
   }
 
   dimension: last {
     label: "Last Played Date"
+    description: "Date last played according to Phish.net"
     type: date
     sql: ${TABLE}.last ;;
   }

@@ -1,6 +1,8 @@
 view: phishin_tracks {
   sql_table_name: dean_looker_phish_thesis.phishin_tracks ;;
 
+
+
   dimension: id {
     label: "Track ID"
     primary_key: yes
@@ -14,6 +16,21 @@ view: phishin_tracks {
     description: "Track Title on Phish.in"
     type: string
     sql: ${TABLE}.title ;;
+    html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
+            🔥 {{linked_value}}
+          {% else %}
+            {{linked_value}}
+          {% endif %} ;;
+    drill_fields: [track_details*]
+    link: {
+      label: "Song Dashboard"
+      url: "/dashboards/459?Song%20Name={{ value }}"
+    }
+
+  }
+
+  set: track_details {
+    fields: [title, song_duration_sum, phishin_tracks_tags.teases_list, phishin_tracks_tags.jamcharts_notes_list]
   }
 
 # durations in the db are stored in ms, this is converted #
