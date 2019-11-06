@@ -17,11 +17,14 @@ view: phishnet_ratings {
   dimension_group: showdate {
     type: time
     timeframes: [
-      raw,
       date,
-      week,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
       month,
-      quarter,
+      month_name,
+      month_num,
       year
     ]
     convert_tz: no

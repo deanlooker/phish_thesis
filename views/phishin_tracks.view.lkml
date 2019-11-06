@@ -23,11 +23,11 @@ view: phishin_tracks {
           {% endif %} ;;
     #drill_fields: [track_details*]
       link: {
-        label: "Song Dashboard"
+        label: "🎶 Song Dashboard"
         url: "/dashboards/459?Song%20Name={{ value }}"
       }
       link: {
-        label: "Show Details"
+        label: "📓 Show Details"
         url: "/explore/dean_phish_thesis/phishin_tracks?fields=phishin_tracks.position,phishin_tracks.set_name,phishin_tracks.title,phishin_tracks.duration,phishin_tracks.id,phishin_tracks_tags.tease_list,phishin_tracks_tags.jamcharts_notes_list,phishnet_songs.songs&f[phishin_tracks.show_date]={{ _filters['phishin_tracks.show_date'] | url_encode }}&sorts=phishin_tracks.position&limit=500&column_limit=50&dynamic_fields=%5B%5D&query_timezone=America%2FLos_Angeles&origin=drill-menu"
       }
   }
@@ -82,29 +82,38 @@ view: phishin_tracks {
     sql: ${TABLE}.set_name ;;
   }
 
-  dimension_group: show {
+  dimension_group: show_group {
     type: time
     timeframes: [
-      raw,
       date,
-      week,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
       month,
-      quarter,
+      month_name,
+      month_num,
       year
     ]
     convert_tz: no
+    datatype: date
+    sql: ${show_date} ;;
+  }
+
+  dimension: show_date {
+    type: date
     datatype: date
     sql: ${TABLE}.show_date ;;
   }
 
   measure: last_played {
     type: date
-    sql: max(${show_raw}) ;;
+    sql: max(${show_date}) ;;
   }
 
   measure: first_played {
     type: date
-    sql: min(${show_raw}) ;;
+    sql: min(${show_date}) ;;
   }
 
   dimension: show_id {

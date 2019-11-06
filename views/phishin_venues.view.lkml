@@ -2,48 +2,11 @@ view: phishin_venues {
   sql_table_name: dean_looker_phish_thesis.phishin_venues ;;
 
   dimension: id {
+    label: "Venue ID"
+    hidden: yes
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
-  }
-
-  dimension: city {
-    type: string
-    sql: ${TABLE}.city ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
-  }
-
-  dimension: country {
-    type: string
-    map_layer_name: countries
-    sql: ${TABLE}.country ;;
-  }
-
-  dimension: latitude {
-    type: number
-    sql: ${TABLE}.latitude ;;
-  }
-
-  dimension: longitude {
-    type: number
-    sql: ${TABLE}.longitude ;;
-  }
-
-  dimension: coordinates {
-    type: location
-    sql_latitude: ${latitude} ;;
-    sql_longitude: ${longitude} ;;
-  }
-
-  dimension: location {
-    label: "Location"
-    description: "City, State, (Country)"
-    type: string
-    sql: ${TABLE}.location ;;
   }
 
   dimension: venue_name {
@@ -51,6 +14,57 @@ view: phishin_venues {
     type: string
     sql: ${TABLE}.name ;;
   }
+
+  dimension: coordinates {
+    view_label: "Location"
+    type: location
+    sql_latitude: ${latitude} ;;
+    sql_longitude: ${longitude} ;;
+  }
+
+
+
+  dimension: location {
+    view_label: "Location"
+    label: "City, State, (Country)"
+    type: string
+    sql: ${TABLE}.location ;;
+  }
+
+  dimension: city {
+    view_label: "Location"
+    type: string
+    sql: ${TABLE}.city ;;
+  }
+
+  dimension: state {
+    view_label: "Location"
+    type: string
+    sql: ${TABLE}.state ;;
+  }
+
+  dimension: country {
+    view_label: "Location"
+    type: string
+    map_layer_name: countries
+    sql: ${TABLE}.country ;;
+  }
+
+  dimension: latitude {
+    hidden:  yes
+    type: number
+    sql: ${TABLE}.latitude ;;
+  }
+
+  dimension: longitude {
+    hidden:  yes
+    type: number
+    sql: ${TABLE}.longitude ;;
+  }
+
+
+
+
 
 #       ** This one is an array **
 #
@@ -62,11 +76,14 @@ view: phishin_venues {
   dimension_group: show_dates {
     type: time
     timeframes: [
-      raw,
       date,
-      week,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
       month,
-      quarter,
+      month_name,
+      month_num,
       year
     ]
     convert_tz: no

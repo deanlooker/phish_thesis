@@ -85,7 +85,7 @@ view: phishnet_songs {
   dimension: debut_date {
     datatype: date
     type: date
-    sql: ${TABLE}.debut} ;;
+    sql: ${TABLE}.debut ;;
     link: {
       label: "🎫 Show Dashboard"
       url: "/dashboards/465?Show%20Date={{ value }}"
