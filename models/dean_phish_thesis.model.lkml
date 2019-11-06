@@ -45,7 +45,7 @@ explore: phishin_tracks {
 explore: shows_combined {
   label: "Shows"
   join: phishnet_ratings {
-    sql_on: ${shows_combined.date_date} = ${phishnet_ratings.showdate_date} ;;
+    sql_on: ${shows_combined.showdate} = ${phishnet_ratings.showdate_date} ;;
     relationship: one_to_one
   }
   join: phishin_venues {
@@ -70,6 +70,23 @@ explore: phishnet_songs {
   join: shows_combined {
     view_label: "Shows"
     sql_on: ${phishin_tracks.show_date}=${shows_combined.show_date};;
+    relationship: many_to_one
+  }
+}
+
+explore: track_songids {
+  label: "Track Songs"
+  join: phishin_tracks {
+    sql_on: ${track_songids.track_id}=${phishin_tracks.id} ;;
+    relationship: many_to_one
+  }
+  join: phishin_tracks_tags {
+    view_label: "Live Tracks"
+    sql: LEFT JOIN UNNEST(${phishin_tracks.tags}) as phishin_tracks_tags ;;
+    relationship: one_to_many
+  }
+  join: phishnet_songs {
+    sql_on: ${track_songids.song_id}=${phishnet_songs.song_id} ;;
     relationship: many_to_one
   }
 }

@@ -30,6 +30,10 @@ view: phishnet_songs {
     description: "Title of the Song"
     type: string
     sql: ${TABLE}.title ;;
+    link: {
+      label: "🎶 Song Dashboard"
+      url: "/dashboards/459?Song%20Name={{ value }}"
+    }
   }
 
   dimension: song_id {
@@ -60,18 +64,60 @@ view: phishnet_songs {
     sql: ${TABLE}.times ;;
   }
 
-  dimension: debut {
-    label: "Debut Date"
+  dimension_group: debut_group {
     description: "Date first played according to Phish.net"
-    type: date
-    sql: ${TABLE}.debut ;;
+    type: time
+    timeframes: [
+      date,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
+      month,
+      month_name,
+      month_num,
+      year
+    ]
+    datatype: date
+    sql: ${debut_date} ;;
   }
 
-  dimension: last {
-    label: "Last Played Date"
-    description: "Date last played according to Phish.net"
+  dimension: debut_date {
+    datatype: date
     type: date
+    sql: ${TABLE}.debut} ;;
+    link: {
+      label: "🎫 Show Dashboard"
+      url: "/dashboards/465?Show%20Date={{ value }}"
+    }
+  }
+
+  dimension_group: last_played_group {
+    description: "Date last played according to Phish.net"
+    type: time
+    timeframes: [
+      date,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
+      month,
+      month_name,
+      month_num,
+      year
+    ]
+    datatype: date
+    sql: ${last_played} ;;
+  }
+
+  dimension: last_played {
+    type: date
+    datatype: date
     sql: ${TABLE}.last ;;
+    link: {
+      label: "🎫 Show Dashboard"
+      url: "/dashboards/465?Show%20Date={{ value }}"
+    }
   }
 
   dimension: gap {
@@ -86,9 +132,15 @@ view: phishnet_songs {
       song_id,
       originalartist,
       times,
-      debut,
-      last,
+      debut_date,
+      last_played,
       gap
     ]
+  }
+
+  measure: songs {
+    description: "Songs included in track"
+    type: list
+    list_field: title
   }
 }

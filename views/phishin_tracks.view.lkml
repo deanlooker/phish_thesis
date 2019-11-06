@@ -21,12 +21,15 @@ view: phishin_tracks {
           {% else %}
             {{linked_value}}
           {% endif %} ;;
-    drill_fields: [track_details*]
-    link: {
-      label: "Song Dashboard"
-      url: "/dashboards/459?Song%20Name={{ value }}"
-    }
-
+    #drill_fields: [track_details*]
+      link: {
+        label: "Song Dashboard"
+        url: "/dashboards/459?Song%20Name={{ value }}"
+      }
+      link: {
+        label: "Show Details"
+        url: "/explore/dean_phish_thesis/phishin_tracks?fields=phishin_tracks.position,phishin_tracks.set_name,phishin_tracks.title,phishin_tracks.duration,phishin_tracks.id,phishin_tracks_tags.tease_list,phishin_tracks_tags.jamcharts_notes_list,phishnet_songs.songs&f[phishin_tracks.show_date]={{ _filters['phishin_tracks.show_date'] | url_encode }}&sorts=phishin_tracks.position&limit=500&column_limit=50&dynamic_fields=%5B%5D&query_timezone=America%2FLos_Angeles&origin=drill-menu"
+      }
   }
 
   set: track_details {
@@ -117,9 +120,10 @@ view: phishin_tracks {
     sql: ${TABLE}.mp3 ;;
   }
 
-  measure: count {
+  measure: track_count {
+    description: "Count of tracks in the show on phish.in"
     type: count
-    drill_fields: [id, set_name]
+    drill_fields: [track_details*]
   }
 
   # HIDDEN FIELDS #

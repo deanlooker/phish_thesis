@@ -1,9 +1,21 @@
 view: phishnet_venues {
   sql_table_name: dean_looker_phish_thesis.phishnet_venues ;;
 
+  dimension: name {
+    label: "Venue Name"
+    description: "Venue Name according to Phish.net"
+    type: string
+    sql: ${TABLE}.name ;;
+  }
+
   dimension: city {
     type: string
     sql: ${TABLE}.city ;;
+  }
+
+  dimension: state {
+    type: string
+    sql: ${TABLE}.state ;;
   }
 
   dimension: country {
@@ -12,44 +24,52 @@ view: phishnet_venues {
     sql: ${TABLE}.country ;;
   }
 
-  dimension_group: first_played {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
+  dimension: first_played {
+    type: date
     datatype: date
     sql: ${TABLE}.first_played ;;
   }
 
-  dimension_group: last_played {
+  dimension_group: first_played_group {
+    description: "Date first played according to Phish.net"
     type: time
     timeframes: [
-      raw,
       date,
-      week,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
       month,
-      quarter,
+      month_name,
+      month_num,
       year
     ]
-    convert_tz: no
+    datatype: date
+    sql: ${first_played} ;;
+  }
+
+  dimension: last_played {
+    type: date
     datatype: date
     sql: ${TABLE}.last_played ;;
   }
 
-  dimension: name {
-    type: string
-    sql: ${TABLE}.name ;;
-  }
-
-  dimension: state {
-    type: string
-    sql: ${TABLE}.state ;;
+  dimension_group: last_played_group {
+    description: "Date last played according to Phish.net"
+    type: time
+    timeframes: [
+      date,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
+      month,
+      month_name,
+      month_num,
+      year
+    ]
+    datatype: date
+    sql: ${last_played} ;;
   }
 
   dimension: times_played {

@@ -22,6 +22,7 @@ Show Dashboard
 - setlist
 - audio from the show
 - find shows missing from phish.in, pipe setlists from .net?
--
+- setlist drill:
+-   position, set, track title (link to audio), duration, songs (link to song dashboard), teases, jamcharts notes
 
 Songs Dashboard

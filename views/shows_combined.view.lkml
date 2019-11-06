@@ -2,6 +2,7 @@ view: shows_combined {
   sql_table_name: dean_looker_phish_thesis.shows_combined ;;
 
   dimension: show_number {
+    view_label: "Phish.net Shows"
     type: number
     sql: ${TABLE}.show_number ;;
   }
@@ -35,16 +36,33 @@ view: shows_combined {
     view_label: "Phish.net Shows"
     type: time
     timeframes: [
-      raw,
       date,
-      week,
+      day_of_month,
+      day_of_week,
+      day_of_week_index,
+      day_of_year,
       month,
-      quarter,
+      month_name,
+      month_num,
       year
     ]
     convert_tz: no
     datatype: date
+    sql: ${showdate} ;;
+  }
+
+  dimension: showdate {
+    view_label: "Phish.net Shows"
+    type: date
     sql: ${TABLE}.showdate ;;
+    link: {
+      label: "🎧 Listen to this show"
+      url: "http://phish.in/{{value}}"
+    }
+    link: {
+      label: "🎫 Show Dashboard"
+      url: "/dashboards/465?Show%20Date={{value}}"
+    }
   }
 
   dimension: showid {
@@ -71,6 +89,10 @@ view: shows_combined {
     view_label: "Phish.net Shows"
     type: string
     sql: ${TABLE}.tourname ;;
+    link: {
+      label: "🚌 Tour Dashboard"
+      url: "/dashboards/465?Show%20Date={{value}}"
+    }
   }
 
   dimension: venue {
@@ -85,6 +107,8 @@ view: shows_combined {
     value_format_name: id
     sql: ${TABLE}.venueid ;;
   }
+
+
 
   measure: count {
     view_label: "Phish.net Shows"
