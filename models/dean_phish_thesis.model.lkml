@@ -30,11 +30,7 @@ explore: phishin_tracks {
     sql_on: ${phishin_tracks.show_date} = ${shows_combined.date_date} ;;
     relationship: many_to_one
   }
-  join: phishin_venues {
-    view_label: "Phish.in Venues"
-    sql_on: ${phishin_venues.id} = ${shows_combined.venueid} ;;
-    relationship: many_to_many
-  }
+
 }
 
 
