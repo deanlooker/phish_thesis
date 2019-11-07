@@ -41,6 +41,7 @@ view: phishin_venues {
     view_label: "Location"
     type: string
     sql: ${TABLE}.state ;;
+    map_layer_name: us_states
   }
 
   dimension: country {
