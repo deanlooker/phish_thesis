@@ -2,10 +2,10 @@ connection: "dean_phish_data"
 
 include: "/**/**/*.view"       # include all the views
 
-# datagroup: weekly {
-#   max_cache_age: "168 hours"
-#   sql_trigger: SELECT max(showid) FROM dean_looker_phish_thesis.phishnet_shows ;;
-# }
+datagroup: weekly {
+  max_cache_age: "168 hours"
+  sql_trigger: SELECT max(showid) FROM dean_looker_phish_thesis.phishnet_shows ;;
+}
 
 explore: phishin_tracks {
   label: "Live Tracks"

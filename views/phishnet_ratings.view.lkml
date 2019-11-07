@@ -7,10 +7,19 @@ view: phishnet_ratings {
     sql: ${TABLE}.rating ;;
   }
 
-  measure: rating_measure {
-    label: "Rating"
+  measure: max_rating {
+    # use this when not aggregating #
+    label: "Max Rating"
     description: "Rating used with MAX() to make available as measure"
     type: max
+    sql: ${rating} ;;
+  }
+
+  measure: avg_rating {
+    # use this when not aggregating #
+    label: "Average Rating"
+    description: "Average show rating"
+    type: average
     sql: ${rating} ;;
   }
 
