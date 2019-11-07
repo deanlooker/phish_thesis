@@ -2,13 +2,9 @@
 
 
 Song Dashboard -
-- Add filters (Song(required), date range, tour, era, venue, geolocation)
 - Add most recent show date measure for comparison
 - Add dimension to calculate gap between two dates
-- calculate average gap? max gap?
-- Add yesno flags for jamcharts/teases/sbd/debut
-  - consider liquid formatting instead?
-- Add drilldowns
+  - calculate average gap? max gap?
 - Song links - spotify?
 
 Songs Dashboard

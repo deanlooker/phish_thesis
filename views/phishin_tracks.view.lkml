@@ -16,11 +16,20 @@ view: phishin_tracks {
     description: "Track Title on Phish.in"
     type: string
     sql: ${TABLE}.title ;;
+    # html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
+    #         🔥 {{linked_value}}
+    #       {% else %}
+    #         {{linked_value}}
+    #       {% endif %} ;;
     html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
-            🔥 {{linked_value}}
+            🔥
           {% else %}
-            {{linked_value}}
-          {% endif %} ;;
+          {% endif %}
+          {% if phishin_tracks.debut_yesno._value == 'Yes' %}
+            🐣
+          {% else %}
+          {% endif %}
+            {{linked_value}} ;;
     #drill_fields: [track_details*]
       link: {
         label: "🎶 Song Dashboard"
@@ -29,6 +38,10 @@ view: phishin_tracks {
       link: {
         label: "📓 Show Details"
         url: "/explore/dean_phish_thesis/phishin_tracks?fields=phishin_tracks.position,phishin_tracks.set_name,phishin_tracks.title,phishin_tracks.duration,phishin_tracks.id,phishin_tracks_tags.tease_list,phishin_tracks_tags.jamcharts_notes_list,phishnet_songs.songs&f[phishin_tracks.show_date]={{ _filters['phishin_tracks.show_date'] | url_encode }}&sorts=phishin_tracks.position&limit=500&column_limit=50&dynamic_fields=%5B%5D&query_timezone=America%2FLos_Angeles&origin=drill-menu"
+      }
+      link: {
+        label: "🎧 Listen to this track"
+        url: "{{ mp3._value }}"
       }
   }
 
@@ -108,11 +121,13 @@ view: phishin_tracks {
 
   measure: last_played {
     type: date
+    datatype: date
     sql: max(${show_date}) ;;
   }
 
   measure: first_played {
     type: date
+    datatype: date
     sql: min(${show_date}) ;;
   }
 
@@ -158,6 +173,11 @@ view: phishin_tracks {
   dimension: jamcharts_yesno {
   type: yesno
   sql: EXISTS (SELECT 1 from unnest(tags) where name = "Jamcharts") ;;
+  }
+
+  dimension: debut_yesno {
+    type: yesno
+    sql: EXISTS (SELECT 1 from unnest(tags) where name = "Debut") ;;
   }
 
 

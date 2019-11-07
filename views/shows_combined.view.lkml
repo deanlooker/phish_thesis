@@ -5,6 +5,7 @@ view: shows_combined {
     view_label: "Phish.net Shows"
     type: number
     sql: ${TABLE}.show_number ;;
+    value_format_name: id
   }
 
 # from phish.net #
@@ -54,6 +55,7 @@ view: shows_combined {
   dimension: showdate {
     view_label: "Phish.net Shows"
     type: date
+    datatype: date
     sql: ${TABLE}.showdate ;;
     link: {
       label: "🎧 Listen to this show"
@@ -113,7 +115,7 @@ view: shows_combined {
   measure: count {
     view_label: "Phish.net Shows"
     type: count
-    drill_fields: [tourname, shows.showid, shows.tourname]
+    drill_fields: [tourname, showdate, show_month, show_year, location, venue]
   }
 
   # dimension: artistid {
@@ -151,6 +153,7 @@ view: shows_combined {
   }
 
   dimension_group: date {
+    hidden: yes
     view_label: "Phish.in Shows"
     type: time
     timeframes: [
@@ -174,9 +177,17 @@ view: shows_combined {
     sql: cast((${TABLE}.duration/1000)AS INT64) ;;
   }
 
+  measure: show_duration_sum {
+    label: "Show Duration"
+    description: "Duration of show"
+    type: sum
+    sql: ${duration_seconds}/86400 ;;
+    value_format: "h:mm:ss"
+  }
+
   dimension: is_incomplete {
     view_label: "Phish.in Shows"
-    label: "Is Incomplete? (Yes/No)"
+    label: "Incomplete"
     description: "Shows whether or not the audio for the show is incomplete"
     type: yesno
     sql: ${TABLE}.incomplete ;;
@@ -184,7 +195,7 @@ view: shows_combined {
 
   dimension: is_sbd {
     view_label: "Phish.in Shows"
-    label: "Is Soundboard? (Yes/No)"
+    label: "SBD"
     description: "Shows whether or not the audio for the show is a soundboard recording"
     type: yesno
     sql: ${TABLE}.sbd ;;
@@ -192,25 +203,29 @@ view: shows_combined {
 
   dimension: is_rmstr {
     view_label: "Phish.in Shows"
-    label: "Is Remastered? (Yes/No)"
+    label: "Remastered"
     description: "Shows whether or not the audio for the show has been remastered"
     type: yesno
     sql: ${TABLE}.remastered ;;
   }
 
+
   dimension: tour_id {
+    hidden:  yes
     view_label: "Phish.in Shows"
     type: number
     sql: ${TABLE}.tour_id ;;
   }
 
   dimension: venue_name {
+    hidden:  yes
     view_label: "Phish.in Shows"
     type: string
     sql: ${TABLE}.venue_name ;;
   }
 
   dimension: taper_notes {
+    hidden: yes
     view_label: "Phish.in Shows"
     type: string
     sql: ${TABLE}.taper_notes ;;
