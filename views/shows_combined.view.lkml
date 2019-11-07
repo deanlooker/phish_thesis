@@ -177,13 +177,18 @@ view: shows_combined {
     sql: cast((${TABLE}.duration/1000)AS INT64) ;;
   }
 
-  measure: show_duration_sum {
-    label: "Show Duration"
-    description: "Duration of show"
-    type: sum
+  dimension: show_duration {
     sql: ${duration_seconds}/86400 ;;
     value_format: "h:mm:ss"
   }
+
+#   measure: show_duration_max {
+#     label: "Show Duration Measure"
+#     description: "Duration of show"
+#     type: max
+#     sql: ${duration_seconds}/86400 ;;
+#     value_format: "h:mm:ss"
+#   }
 
   dimension: is_incomplete {
     view_label: "Phish.in Shows"
