@@ -45,6 +45,40 @@ view: phishin_tracks {
       }
   }
 
+  dimension: title_sme_test {
+    label: "Track Title (SME Test)"
+    description: "Use for SME test only"
+    type: string
+    sql: ${TABLE}.title ;;
+    # html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
+    #         🔥 {{linked_value}}
+    #       {% else %}
+    #         {{linked_value}}
+    #       {% endif %} ;;
+    html: {% if phishin_tracks_tags.jamcharts_notes_list._rendered_value != null %}
+            🔥
+          {% else %}
+          {% endif %}
+          {% if phishin_tracks.debut_yesno._value == 'Yes' %}
+            🐣
+          {% else %}
+          {% endif %}
+            {{linked_value}} ;;
+    #drill_fields: [track_details*]
+      link: {
+        label: "🎶 Jam Details"
+        url: "/dashboards/484?Song%20Name={{ value }}&Is%20Jam%3F={{ phishin_tracks.jamcharts_yesno._value }}&Show%20Date={{ _filters['phishin_tracks.show_date'] | url_encode }}"
+      }
+      link: {
+        label: "📓 Show Details"
+        url: "/explore/dean_phish_thesis/phishin_tracks?fields=phishin_tracks.position,phishin_tracks.set_name,phishin_tracks.title,phishin_tracks.duration,phishin_tracks.id,phishin_tracks_tags.tease_list,phishin_tracks_tags.jamcharts_notes_list,phishnet_songs.songs&f[phishin_tracks.show_date]={{ _filters['phishin_tracks.show_date'] | url_encode }}&sorts=phishin_tracks.position&limit=500&column_limit=50&dynamic_fields=%5B%5D&query_timezone=America%2FLos_Angeles&origin=drill-menu"
+      }
+      link: {
+        label: "🎧 Listen to this track"
+        url: "{{ mp3._value }}"
+      }
+    }
+
   set: track_details {
     fields: [title, song_duration_sum, phishin_tracks_tags.teases_list, phishin_tracks_tags.jamcharts_notes_list]
   }
@@ -179,6 +213,11 @@ view: phishin_tracks {
   dimension: debut_yesno {
     type: yesno
     sql: EXISTS (SELECT 1 from unnest(tags) where name = "Debut") ;;
+  }
+
+  dimension: test_yesno {
+    type: yesno
+    sql: EXISTS (SELECT 1 from dean_looker_phish_thesis.phishnet_songs where title = "Tweezer") ;;
   }
 
 
